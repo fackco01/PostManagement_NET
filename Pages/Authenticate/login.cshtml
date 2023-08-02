@@ -1,0 +1,66 @@
+﻿@page
+@model Assignment3.Pages.Authenticate.loginModel
+@{
+}
+
+<h1>Please login here</h1>
+<h3>Enter your details below</h3>
+
+<div id="notice">
+
+</div>
+
+<form class="m-3">
+    <div class="form-floating mb-3">
+        <input type="email" class="form-control" id="email" placeholder="abc123">
+        <label for="floatingInput">User Name</label>
+    </div>
+    <div class="form-floating mb-3">
+        <input type="password" class="form-control" id="password" placeholder="********">
+        <label for="floatingPassword">Password</label>
+    </div>
+
+    <div>
+        <button type="button" class="btn btn-primary" id="loginbtn"> Login </button>
+        <a asp-page="./register" class="btn btn-secondary">Register</a>
+    </div>
+</form>
+<div>
+    <a asp-page="../Index">Back To Home</a>
+</div>
+
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.0/jquery.min.js" integrity="sha512-3gJwYpMe3QewGELv8k/BX9vcqhryRdzRMxVfq6ngyWXwo03GFEzjsUm8Q7RZcHPHksttq7/GFoxjCVUjkjvPdw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
+<script>
+
+    $(document).on('click', 'button[id^="loginbtn"]', function () {
+        console.log('login');
+        $.ajax({
+            type: "GET",
+            url: "/Authenticate/login?handler=Login",
+            data: {
+                email: $('#email').val(),
+                password: $('#password').val()
+            },
+            error: function (error) {
+                console.log(error)
+            },
+            success: function (data) {
+                if(data != "")
+                {
+                    document.cookie = "account="+ data.fullName +", email=" + data.email +", id=" + data.userID  + "; path=/";
+                    $("#notice").empty().append("<h5 class='text-success' >Login Success</h5>");
+                    $("#login").hide();
+                    $("#register").hide();
+                }
+                else
+                {
+                    $("#notice").empty().append("    <h5 class='text-success' >Login Fail</h5>");
+                }
+            }
+        });
+    });
+
+</script>
+
